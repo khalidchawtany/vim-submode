@@ -434,7 +434,14 @@ function! s:on_executing_action(submode)  "{{{2
   if (s:original_showmode || g:submode_always_show_submode)
   \  && s:may_override_showmode_p(mode())
     echohl ModeMsg
-    echo '-- Submode:' a:submode '--'
+    "Check if submode has set "g:submode_".a:submode variable
+    let mode_var = "g:submode_".substitute(a:submode, "-", "_", "")
+    if exists(mode_var)
+      "-- Submode: toggle-fold -- (MSG)
+      echo '-- Submode:' a:submode '-- (' eval(mode_var) ')' 
+    else
+      echo '-- Submode:' a:submode '--'
+    endif
     echohl None
   endif
   return ''
